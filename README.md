@@ -133,7 +133,7 @@ This project was developed by:
 
 👤 **Author2**
 
-- GitHub: [@](https://github.com/ikennarichard)
+- GitHub: [@ikennarichard](https://github.com/ikennarichard)
 - LinkedIn: [Ikenna Oguejiofor](https://www.linkedin.com/in/ikenna-oguejiofor-38076a237)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
