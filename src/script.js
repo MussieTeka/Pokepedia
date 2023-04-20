@@ -145,10 +145,32 @@ pokemonData.forEach((pokemon, index) => {
           });
 
           previousComments.append(commentContainer);
+        })
+        .catch((error) => {
+          throw new Error(error);
         });
     }
 
     fetchAndDisplayComments();
+
+    //  Add comments to API
+    function addComment(username, commentText) {
+      const comment = {
+        item_id: `${pokemon.name}`,
+        username,
+        comment: commentText,
+      };
+      fetch(
+        'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/nFsF5tumQEVYa0WWw9ph/comments',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(comment),
+        },
+      );
+    }
 
     const form = document.createElement('form');
     const commentTitle = document.createElement('h3');
@@ -165,6 +187,18 @@ pokemonData.forEach((pokemon, index) => {
     const submitButton = document.createElement('button');
     submitButton.type = 'submit';
     submitButton.textContent = 'Submit';
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const username = nameInput.value.trim();
+      const commentText = commentInput.value.trim();
+      if (username === '' || commentText === '') {
+        return;
+      }
+      addComment(username, commentText);
+      nameInput.value = '';
+      commentInput.value = '';
+    });
 
     form.append(commentTitle, nameInput, commentInput, submitButton);
 
@@ -183,7 +217,7 @@ pokemonData.forEach((pokemon, index) => {
 
   const likes = document.createElement('span');
   likes.textContent = `${pokemon.likes} likes`;
-  //   Addi likes to API
+  //   Add likes to API
   const fetchAndUpdateLikes = (pokemon) => {
     fetch(
       `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/tVqztXshPZbS48Z4myPF/likes?item_id=${pokemon.name}`,
@@ -192,6 +226,9 @@ pokemonData.forEach((pokemon, index) => {
       .then((data) => {
         pokemon.likes = data[index].likes;
         likes.textContent = `${pokemon.likes} likes`;
+      })
+      .catch((error) => {
+        throw new Error(error);
       });
   };
   fetchAndUpdateLikes(pokemon);
