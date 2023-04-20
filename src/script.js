@@ -44,7 +44,7 @@ const pokemonListContainer = document.querySelector('.pokemon-list');
 const rowsContainer = document.createElement('div');
 rowsContainer.classList.add('rows-container');
 
-pokemonData.forEach((pokemon) => {
+pokemonData.forEach((pokemon, index) => {
   const column = document.createElement('div');
   column.classList.add('column');
 
@@ -115,7 +115,7 @@ pokemonData.forEach((pokemon) => {
     const form = document.createElement('form');
 
     const commentTitle = document.createElement('h3');
-    commentTitle.textContent = 'Drop a Poké thought!';
+    commentTitle.textContent = 'Drop your comment!';
 
     const nameInput = document.createElement('input');
     nameInput.type = 'text';
@@ -135,7 +135,22 @@ pokemonData.forEach((pokemon) => {
     pokemonListContainer.append(popupContainer);
   });
 
-  actions.append(heartIcon, commentButton);
+  const likes = document.createElement('span');
+  likes.textContent = `${pokemon.likes} likes`;
+
+  const fetchAndUpdateLikes = (pokemon) => {
+    fetch(
+      `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/tVqztXshPZbS48Z4myPF/likes?item_id=${pokemon.name}`,
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        pokemon.likes = data[index].likes;
+        likes.textContent = `${pokemon.likes} likes`;
+      });
+  };
+  fetchAndUpdateLikes(pokemon);
+
+  actions.append(heartIcon, likes, commentButton);
   pokemonCard.append(image, name, actions);
   column.append(pokemonCard);
 
