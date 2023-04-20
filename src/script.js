@@ -70,7 +70,7 @@ pokemonData.forEach((pokemon, index) => {
   // Popup window
   commentButton.addEventListener('click', async () => {
     const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${pokemon.name}`,
+      `https://pokeapi.co/api/v2/pokemon/${pokemon.name}`
     );
     const data = await response.json();
 
@@ -122,7 +122,7 @@ pokemonData.forEach((pokemon, index) => {
 
     function fetchAndDisplayComments() {
       fetch(
-        `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/nFsF5tumQEVYa0WWw9ph/comments?item_id=${pokemon.name}`,
+        `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/UxVZnVqZUpR0G6vqpeQm/comments?item_id=${pokemon.name}`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -145,9 +145,6 @@ pokemonData.forEach((pokemon, index) => {
           });
 
           previousComments.append(commentContainer);
-        })
-        .catch((error) => {
-          throw new Error(error);
         });
     }
 
@@ -161,14 +158,14 @@ pokemonData.forEach((pokemon, index) => {
         comment: commentText,
       };
       fetch(
-        'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/nFsF5tumQEVYa0WWw9ph/comments',
+        'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/UxVZnVqZUpR0G6vqpeQm/comments',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(comment),
-        },
+        }
       );
     }
 
@@ -208,7 +205,7 @@ pokemonData.forEach((pokemon, index) => {
       name,
       description,
       previousComments,
-      form,
+      form
     );
 
     popupContainer.append(popupContent);
@@ -217,18 +214,15 @@ pokemonData.forEach((pokemon, index) => {
 
   const likes = document.createElement('span');
   likes.textContent = `${pokemon.likes} likes`;
-  //   Add likes to API
+  //   Addi likes to API
   const fetchAndUpdateLikes = (pokemon) => {
     fetch(
-      `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/tVqztXshPZbS48Z4myPF/likes?item_id=${pokemon.name}`,
+      `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/tVqztXshPZbS48Z4myPF/likes?item_id=${pokemon.name}`
     )
       .then((response) => response.json())
       .then((data) => {
         pokemon.likes = data[index].likes;
         likes.textContent = `${pokemon.likes} likes`;
-      })
-      .catch((error) => {
-        throw new Error(error);
       });
   };
   fetchAndUpdateLikes(pokemon);
@@ -240,7 +234,7 @@ pokemonData.forEach((pokemon, index) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ item_id: pokemon.name }),
-      },
+      }
     );
     fetchAndUpdateLikes(pokemon);
   });
@@ -252,4 +246,18 @@ pokemonData.forEach((pokemon, index) => {
   rowsContainer.append(column);
 });
 
-pokemonListContainer.append(rowsContainer);
+let itemCount = 0;
+pokemonData.forEach(() => {
+  itemCount += 1;
+});
+
+const counter = document.createElement('div');
+counter.classList.add('counter');
+
+const itemcounter = document.createElement('p');
+counter.classList.add('item-counter');
+itemcounter.textContent = `Poké Count: ${itemCount}`;
+
+counter.appendChild(itemcounter);
+
+pokemonListContainer.append(counter, rowsContainer);
