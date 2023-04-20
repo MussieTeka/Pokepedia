@@ -1,5 +1,7 @@
 import './style.css';
 
+import { counter, createCounter } from './itemCounter.js';
+
 const pokemonData = [
   {
     name: 'pikachu',
@@ -38,6 +40,8 @@ const pokemonData = [
     likes: '',
   },
 ];
+
+export default pokemonData;
 
 const pokemonListContainer = document.querySelector('.pokemon-list');
 
@@ -120,7 +124,7 @@ pokemonData.forEach((pokemon, index) => {
 
     // Display previous comments from API
 
-    function fetchAndDisplayComments() {
+    const fetchAndDisplayComments = () => {
       fetch(
         `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/nFsF5tumQEVYa0WWw9ph/comments?item_id=${pokemon.name}`,
       )
@@ -145,16 +149,12 @@ pokemonData.forEach((pokemon, index) => {
           });
 
           previousComments.append(commentContainer);
-        })
-        .catch((error) => {
-          throw new Error(error);
         });
-    }
-
+    };
     fetchAndDisplayComments();
 
     //  Add comments to API
-    function addComment(username, commentText) {
+    const addComment = (username, commentText) => {
       const comment = {
         item_id: `${pokemon.name}`,
         username,
@@ -169,8 +169,23 @@ pokemonData.forEach((pokemon, index) => {
           },
           body: JSON.stringify(comment),
         },
-      );
-    }
+      ).then(() => {
+        const commentContainer = document.querySelector('.comment-container');
+        const userName = document.createElement('p');
+
+        userName.textContent = username;
+        userName.classList.add('user-name');
+
+        const verticalLine = document.createElement('div');
+        verticalLine.classList.add('vertical-line');
+
+        const userComment = document.createElement('p');
+        userComment.textContent = commentText;
+        userComment.classList.add('user-comment');
+
+        commentContainer.append(userName, verticalLine, userComment);
+      });
+    };
 
     const form = document.createElement('form');
     const commentTitle = document.createElement('h3');
@@ -217,6 +232,7 @@ pokemonData.forEach((pokemon, index) => {
 
   const likes = document.createElement('span');
   likes.textContent = `${pokemon.likes} likes`;
+
   //   Add likes to API
   const fetchAndUpdateLikes = (pokemon) => {
     fetch(
@@ -226,9 +242,6 @@ pokemonData.forEach((pokemon, index) => {
       .then((data) => {
         pokemon.likes = data[index].likes;
         likes.textContent = `${pokemon.likes} likes`;
-      })
-      .catch((error) => {
-        throw new Error(error);
       });
   };
   fetchAndUpdateLikes(pokemon);
@@ -252,4 +265,6 @@ pokemonData.forEach((pokemon, index) => {
   rowsContainer.append(column);
 });
 
-pokemonListContainer.append(rowsContainer);
+pokemonListContainer.append(counter, rowsContainer);
+
+createCounter(pokemonData);
