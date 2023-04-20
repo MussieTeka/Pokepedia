@@ -112,6 +112,49 @@ pokemonData.forEach((pokemon, index) => {
 
     description.append(species, height, weight, abilities);
 
+    // Comment Section
+    const previousComments = document.createElement('div');
+    previousComments.classList.add('previous-comments');
+    const previousCommentsTitle = document.createElement('h3');
+    previousCommentsTitle.textContent = 'Previous Comments!';
+    previousComments.append(previousCommentsTitle);
+
+    // Display previous comments from API
+
+    function fetchAndDisplayComments() {
+      fetch(
+        `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/nFsF5tumQEVYa0WWw9ph/comments?item_id=${pokemon.name}`,
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          const commentContainer = document.createElement('div');
+          commentContainer.classList.add('comment-container');
+
+          data.forEach((comment) => {
+            const userName = document.createElement('p');
+            userName.textContent = comment.username;
+            userName.classList.add('user-name');
+
+            const verticalLine = document.createElement('div');
+            verticalLine.classList.add('vertical-line');
+
+            const userComment = document.createElement('p');
+            userComment.textContent = comment.comment;
+            userComment.classList.add('user-comment');
+
+            commentContainer.append(userName, verticalLine, userComment);
+          });
+
+          previousComments.append(commentContainer);
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
+    }
+
+    fetchAndDisplayComments();
+    //  Add comments to API
+
     const form = document.createElement('form');
 
     const commentTitle = document.createElement('h3');
@@ -130,7 +173,16 @@ pokemonData.forEach((pokemon, index) => {
     submitButton.textContent = 'Submit';
 
     form.append(commentTitle, nameInput, commentInput, submitButton);
-    popupContent.append(closeIcon, image, name, description, form);
+
+    popupContent.append(
+      closeIcon,
+      image,
+      name,
+      description,
+      previousComments,
+      form,
+    );
+
     popupContainer.append(popupContent);
     pokemonListContainer.append(popupContainer);
   });
