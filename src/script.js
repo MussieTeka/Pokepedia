@@ -64,15 +64,78 @@ pokemonData.forEach((pokemon) => {
   const heartIcon = document.createElement('i');
   heartIcon.classList.add('far', 'fa-heart');
 
-  const likes = document.createElement('span');
-  likes.textContent = `${pokemon.likes} likes`;
-
   const commentButton = document.createElement('button');
   commentButton.classList.add('comment-button');
   commentButton.textContent = 'Add Comment';
 
-  // Append the elements to the Pokemon card
-  actions.append(heartIcon, likes, commentButton);
+  commentButton.addEventListener('click', async () => {
+    const response = await fetch(
+      `https://pokeapi.co/api/v2/pokemon/${pokemon.name}`,
+    );
+    const data = await response.json();
+
+    const popupContainer = document.createElement('div');
+    popupContainer.classList.add('popup-container');
+
+    const popupContent = document.createElement('div');
+    popupContent.classList.add('popup-content');
+
+    const closeIcon = document.createElement('i');
+    closeIcon.classList.add('fas', 'fa-times', 'close-icon');
+
+    closeIcon.addEventListener('click', () => {
+      popupContainer.remove();
+    });
+
+    const image = document.createElement('img');
+    image.src = data.sprites.other['official-artwork'].front_default;
+    image.alt = pokemon.name;
+
+    const name = document.createElement('h3');
+    name.textContent = pokemon.name;
+
+    const description = document.createElement('ul');
+
+    const species = document.createElement('li');
+    species.textContent = `Species: ${data.species.name}`;
+
+    const height = document.createElement('li');
+    height.textContent = `Height: ${data.height} decimetres`;
+
+    const weight = document.createElement('li');
+    weight.textContent = `Weight: ${data.weight} hectograms`;
+
+    const abilities = document.createElement('li');
+    abilities.textContent = `Abilities: ${data.abilities
+      .map((a) => a.ability.name)
+      .join(', ')}`;
+
+    description.append(species, height, weight, abilities);
+
+    const form = document.createElement('form');
+
+    const commentTitle = document.createElement('h3');
+    commentTitle.textContent = 'Drop a Poké thought!';
+
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.placeholder = 'Name';
+
+    const commentInput = document.createElement('input');
+    commentInput.type = 'text';
+    commentInput.placeholder = 'Comment';
+
+    const submitButton = document.createElement('button');
+    submitButton.type = 'submit';
+    submitButton.textContent = 'Submit';
+
+    form.append(commentTitle, nameInput, commentInput, submitButton);
+    popupContent.append(closeIcon, image, name, description, form);
+    popupContainer.append(popupContent);
+    pokemonListContainer.append(popupContainer);
+  });
+
+  actions.append(heartIcon, commentButton);
   pokemonCard.append(image, name, actions);
   column.append(pokemonCard);
 
