@@ -53,7 +53,6 @@ pokemonData.forEach((pokemon, index) => {
 
   const image = document.createElement('img');
   image.src = pokemon.image;
-  image.alt = pokemon.name;
 
   const name = document.createElement('h2');
   name.textContent = pokemon.name;
@@ -68,6 +67,7 @@ pokemonData.forEach((pokemon, index) => {
   commentButton.classList.add('comment-button');
   commentButton.textContent = 'Add Comment';
 
+  // Popup window
   commentButton.addEventListener('click', async () => {
     const response = await fetch(
       `https://pokeapi.co/api/v2/pokemon/${pokemon.name}`,
@@ -89,7 +89,6 @@ pokemonData.forEach((pokemon, index) => {
 
     const image = document.createElement('img');
     image.src = data.sprites.other['official-artwork'].front_default;
-    image.alt = pokemon.name;
 
     const name = document.createElement('h3');
     name.textContent = pokemon.name;
@@ -146,17 +145,12 @@ pokemonData.forEach((pokemon, index) => {
           });
 
           previousComments.append(commentContainer);
-        })
-        .catch((error) => {
-          throw new Error(error);
         });
     }
 
     fetchAndDisplayComments();
-    //  Add comments to API
 
     const form = document.createElement('form');
-
     const commentTitle = document.createElement('h3');
     commentTitle.textContent = 'Drop your comment!';
 
@@ -189,7 +183,7 @@ pokemonData.forEach((pokemon, index) => {
 
   const likes = document.createElement('span');
   likes.textContent = `${pokemon.likes} likes`;
-
+  //   Addi likes to API
   const fetchAndUpdateLikes = (pokemon) => {
     fetch(
       `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/tVqztXshPZbS48Z4myPF/likes?item_id=${pokemon.name}`,
@@ -201,6 +195,18 @@ pokemonData.forEach((pokemon, index) => {
       });
   };
   fetchAndUpdateLikes(pokemon);
+
+  heartIcon.addEventListener('click', () => {
+    fetch(
+      'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/tVqztXshPZbS48Z4myPF/likes',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ item_id: pokemon.name }),
+      },
+    );
+    fetchAndUpdateLikes(pokemon);
+  });
 
   actions.append(heartIcon, likes, commentButton);
   pokemonCard.append(image, name, actions);
