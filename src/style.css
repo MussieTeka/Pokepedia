@@ -257,3 +257,15 @@ footer {
   border-top: 3px solid #d62c2c;
   width: 30px;
 }
+
+.counter {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
+}
+
+.item-counter {
+  font-size: 18px;
+  color: #333;
+}
