@@ -2,7 +2,7 @@ import './style.css';
 
 import { counter, createCounter } from './itemCounter.js';
 
-export const pokemonData = [
+const pokemonData = [
   {
     name: 'pikachu',
     image:
@@ -40,6 +40,8 @@ export const pokemonData = [
     likes: '',
   },
 ];
+
+export default pokemonData;
 
 const pokemonListContainer = document.querySelector('.pokemon-list');
 
@@ -265,4 +267,4 @@ pokemonData.forEach((pokemon, index) => {
 
 pokemonListContainer.append(counter, rowsContainer);
 
-createCounter();
+createCounter(pokemonData);
