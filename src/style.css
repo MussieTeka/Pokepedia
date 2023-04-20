@@ -214,17 +214,12 @@ footer {
   background-color: #d62c2c;
 }
 
-.previous-comments {
-  margin-top: 20px;
-}
-
 .comment-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
   margin-bottom: 10px;
-  display: flex;
 }
 
 .previous-comments {
@@ -238,7 +233,6 @@ footer {
 .previous-comments p {
   margin: 5px;
   padding: 10px;
-
   border-radius: 5px;
   font-size: 16px;
   text-align: center;
