@@ -117,5 +117,5 @@ nav a:hover {
 footer {
   position: absolute;
   left: 65px;
-  top: calc(100vh);
+  top: calc(100vh - 30px);
 }
