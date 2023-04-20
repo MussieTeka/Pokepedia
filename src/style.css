@@ -5,6 +5,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
+  position: relative;
 }
 
 .container {
@@ -46,4 +47,10 @@ nav a {
 
 nav a:hover {
   text-decoration: underline;
+}
+
+footer {
+  position: absolute;
+  left: 60px;
+  top: calc(100vh - 30px);
 }
