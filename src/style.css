@@ -5,6 +5,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
+  position: relative;
 }
 
 .container {
@@ -114,6 +115,7 @@ nav a:hover {
 }
 
 footer {
-  margin-top: 20px;
-  margin-left: 40px;
+  position: absolute;
+  left: 40px;
+  top: 700px;
 }
