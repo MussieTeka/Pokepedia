@@ -74,7 +74,7 @@ pokemonData.forEach((pokemon, index) => {
   // Popup window
   commentButton.addEventListener('click', async () => {
     const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${pokemon.name}`
+      `https://pokeapi.co/api/v2/pokemon/${pokemon.name}`,
     );
     const data = await response.json();
 
@@ -126,7 +126,7 @@ pokemonData.forEach((pokemon, index) => {
 
     const fetchAndDisplayComments = () => {
       fetch(
-        `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/nFsF5tumQEVYa0WWw9ph/comments?item_id=${pokemon.name}`
+        `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/nFsF5tumQEVYa0WWw9ph/comments?item_id=${pokemon.name}`,
       )
         .then((response) => response.json())
         .then((data) => {
@@ -168,7 +168,7 @@ pokemonData.forEach((pokemon, index) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(comment),
-        }
+        },
       ).then(() => {
         const commentContainer = document.querySelector('.comment-container');
         const userName = document.createElement('p');
@@ -223,7 +223,7 @@ pokemonData.forEach((pokemon, index) => {
       name,
       description,
       previousComments,
-      form
+      form,
     );
 
     popupContainer.append(popupContent);
@@ -236,7 +236,7 @@ pokemonData.forEach((pokemon, index) => {
   //   Add likes to API
   const fetchAndUpdateLikes = (pokemon) => {
     fetch(
-      `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/tVqztXshPZbS48Z4myPF/likes?item_id=${pokemon.name}`
+      `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/tVqztXshPZbS48Z4myPF/likes?item_id=${pokemon.name}`,
     )
       .then((response) => response.json())
       .then((data) => {
@@ -253,7 +253,7 @@ pokemonData.forEach((pokemon, index) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ item_id: pokemon.name }),
-      }
+      },
     );
     fetchAndUpdateLikes(pokemon);
   });
