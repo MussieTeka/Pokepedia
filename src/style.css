@@ -110,8 +110,9 @@ nav a:hover {
 }
 
 .pokemon-card .comment-button:hover {
-  background-color: #ff3333;
+  background-color: #f33;
 }
+
 footer {
   margin-top: 20px;
   margin-left: 40px;
