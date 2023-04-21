@@ -1,6 +1,8 @@
 import './style.css';
 
-import { counter, createCounter } from './itemCounter.js';
+import { counter, itemCounter } from './itemCounter.js';
+
+import commentCounter from './commentCounter.js';
 
 const pokemonData = [
   {
@@ -40,8 +42,6 @@ const pokemonData = [
     likes: '',
   },
 ];
-
-export default pokemonData;
 
 const pokemonListContainer = document.querySelector('.pokemon-list');
 
@@ -119,38 +119,63 @@ pokemonData.forEach((pokemon, index) => {
     const previousComments = document.createElement('div');
     previousComments.classList.add('previous-comments');
     const previousCommentsTitle = document.createElement('h3');
-    previousCommentsTitle.textContent = 'Previous Comments!';
+    previousCommentsTitle.textContent = 'Comments count loading...';
     previousComments.append(previousCommentsTitle);
 
     // Display previous comments from API
 
     const fetchAndDisplayComments = () => {
-      fetch(
-        `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/nFsF5tumQEVYa0WWw9ph/comments?item_id=${pokemon.name}`,
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          const commentContainer = document.createElement('div');
-          commentContainer.classList.add('comment-container');
-
-          data.forEach((comment) => {
-            const userName = document.createElement('p');
-            userName.textContent = comment.username;
-            userName.classList.add('user-name');
-
-            const verticalLine = document.createElement('div');
-            verticalLine.classList.add('vertical-line');
-
-            const userComment = document.createElement('p');
-            userComment.textContent = comment.comment;
-            userComment.classList.add('user-comment');
-
-            commentContainer.append(userName, verticalLine, userComment);
+      const commentContainer = document.querySelector('.comment-container');
+      if (commentContainer) {
+        // Comments have already been displayed, just update the count
+        fetch(
+          `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/comments?item_id=${pokemon.name}`,
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            previousCommentsTitle.textContent = `Previous comments: ${data.length}`;
           });
+      } else {
+        // Comments haven't been displayed, fetch and append them
+        fetch(
+          `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/comments?item_id=${pokemon.name}`,
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            const commentContainer = document.createElement('div');
+            commentContainer.classList.add('comment-container');
 
-          previousComments.append(commentContainer);
-        });
+            data.forEach((comment) => {
+              const userName = document.createElement('p');
+              userName.textContent = comment.username;
+              userName.classList.add('user-name');
+
+              const verticalLine = document.createElement('div');
+              verticalLine.classList.add('vertical-line');
+
+              const userComment = document.createElement('p');
+              userComment.textContent = comment.comment;
+              userComment.classList.add('user-comment');
+
+              const commentDate = document.createElement('p');
+              commentDate.textContent = comment.creation_date;
+              commentDate.classList.add('comment-date');
+
+              commentContainer.append(
+                userName,
+                commentDate,
+                verticalLine,
+                userComment,
+              );
+            });
+
+            previousCommentsTitle.textContent = `Previous comments: ${data.length}`;
+
+            previousComments.append(commentContainer);
+          });
+      }
     };
+
     fetchAndDisplayComments();
 
     //  Add comments to API
@@ -161,7 +186,7 @@ pokemonData.forEach((pokemon, index) => {
         comment: commentText,
       };
       fetch(
-        'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/nFsF5tumQEVYa0WWw9ph/comments',
+        'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/comments',
         {
           method: 'POST',
           headers: {
@@ -169,22 +194,26 @@ pokemonData.forEach((pokemon, index) => {
           },
           body: JSON.stringify(comment),
         },
-      ).then(() => {
-        const commentContainer = document.querySelector('.comment-container');
-        const userName = document.createElement('p');
+      )
+        .then(() => {
+          const commentContainer = document.querySelector('.comment-container');
+          const userName = document.createElement('p');
 
-        userName.textContent = username;
-        userName.classList.add('user-name');
+          userName.textContent = username;
+          userName.classList.add('user-name');
 
-        const verticalLine = document.createElement('div');
-        verticalLine.classList.add('vertical-line');
+          const verticalLine = document.createElement('div');
+          verticalLine.classList.add('vertical-line');
 
-        const userComment = document.createElement('p');
-        userComment.textContent = commentText;
-        userComment.classList.add('user-comment');
+          const userComment = document.createElement('p');
+          userComment.textContent = commentText;
+          userComment.classList.add('user-comment');
 
-        commentContainer.append(userName, verticalLine, userComment);
-      });
+          commentContainer.append(userName, verticalLine, userComment);
+        })
+        .then(() => {
+          fetchAndDisplayComments();
+        });
     };
 
     const form = document.createElement('form');
@@ -236,7 +265,7 @@ pokemonData.forEach((pokemon, index) => {
   //   Add likes to API
   const fetchAndUpdateLikes = (pokemon) => {
     fetch(
-      `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/tVqztXshPZbS48Z4myPF/likes?item_id=${pokemon.name}`,
+      `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/likes?item_id=${pokemon.name}`,
     )
       .then((response) => response.json())
       .then((data) => {
@@ -248,7 +277,7 @@ pokemonData.forEach((pokemon, index) => {
 
   heartIcon.addEventListener('click', () => {
     fetch(
-      'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/tVqztXshPZbS48Z4myPF/likes',
+      'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/likes',
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -267,4 +296,5 @@ pokemonData.forEach((pokemon, index) => {
 
 pokemonListContainer.append(counter, rowsContainer);
 
-createCounter(pokemonData);
+itemCounter(pokemonData);
+commentCounter(pokemonData);
