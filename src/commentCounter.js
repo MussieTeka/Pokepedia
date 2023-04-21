@@ -4,5 +4,6 @@ commentCountElements.textContent = 'Previous comments...';
 // Function to count comments
 export const countComments = () => {
   const commentCountElements = document.querySelectorAll('.user-comment');
-  return commentCountElements.length;
+  const count = commentCountElements.length;
+  return count === 0 ? '0' : count;
 };
