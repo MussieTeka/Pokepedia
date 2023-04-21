@@ -2,7 +2,7 @@ import './style.css';
 
 import { counter, itemCounter } from './itemCounter.js';
 
-import commentCounter from './commentCounter.js';
+import { commentCountElements, countComments } from './commentCounter.js';
 
 const pokemonData = [
   {
@@ -115,68 +115,50 @@ pokemonData.forEach((pokemon, index) => {
 
     description.append(species, height, weight, abilities);
 
-    // Comment Section
+    // comment section
     const previousComments = document.createElement('div');
     previousComments.classList.add('previous-comments');
-    const previousCommentsTitle = document.createElement('h3');
-    previousCommentsTitle.textContent = 'Comments count loading...';
-    previousComments.append(previousCommentsTitle);
+    previousComments.append(commentCountElements);
 
     // Display previous comments from API
-
     const fetchAndDisplayComments = () => {
-      const commentContainer = document.querySelector('.comment-container');
-      if (commentContainer) {
-        // Comments have already been displayed, just update the count
-        fetch(
-          `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/comments?item_id=${pokemon.name}`,
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            previousCommentsTitle.textContent = `Previous comments: ${data.length}`;
+      fetch(
+        `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/comments?item_id=${pokemon.name}`,
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          const commentContainer = document.createElement('div');
+          commentContainer.classList.add('comment-container');
+
+          data.forEach((comment) => {
+            const userName = document.createElement('p');
+            userName.textContent = comment.username;
+            userName.classList.add('user-name');
+
+            const verticalLine = document.createElement('div');
+            verticalLine.classList.add('vertical-line');
+
+            const userComment = document.createElement('p');
+            userComment.textContent = comment.comment;
+            userComment.classList.add('user-comment');
+
+            commentContainer.append(userName, verticalLine, userComment);
           });
-      } else {
-        // Comments haven't been displayed, fetch and append them
-        fetch(
-          `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/comments?item_id=${pokemon.name}`,
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            const commentContainer = document.createElement('div');
-            commentContainer.classList.add('comment-container');
 
-            data.forEach((comment) => {
-              const userName = document.createElement('p');
-              userName.textContent = comment.username;
-              userName.classList.add('user-name');
+          previousComments.append(commentContainer);
 
-              const verticalLine = document.createElement('div');
-              verticalLine.classList.add('vertical-line');
+          // Display comment count
+          const commentCount = countComments();
 
-              const userComment = document.createElement('p');
-              userComment.textContent = comment.comment;
-              userComment.classList.add('user-comment');
-
-              const commentDate = document.createElement('p');
-              commentDate.textContent = comment.creation_date;
-              commentDate.classList.add('comment-date');
-
-              commentContainer.append(
-                userName,
-                commentDate,
-                verticalLine,
-                userComment,
-              );
-            });
-
-            previousCommentsTitle.textContent = `Previous comments: ${data.length}`;
-
-            previousComments.append(commentContainer);
-          });
-      }
+          commentCountElements.textContent = `Previous comments: ${commentCount}`;
+        });
     };
 
     fetchAndDisplayComments();
+
+    // Append previousComments element to the DOM
+    const container = document.querySelector('.container');
+    container.append(previousComments);
 
     //  Add comments to API
     const addComment = (username, commentText) => {
@@ -194,26 +176,25 @@ pokemonData.forEach((pokemon, index) => {
           },
           body: JSON.stringify(comment),
         },
-      )
-        .then(() => {
-          const commentContainer = document.querySelector('.comment-container');
-          const userName = document.createElement('p');
+      ).then(() => {
+        const commentContainer = document.querySelector('.comment-container');
+        const userName = document.createElement('p');
 
-          userName.textContent = username;
-          userName.classList.add('user-name');
+        userName.textContent = username;
+        userName.classList.add('user-name');
 
-          const verticalLine = document.createElement('div');
-          verticalLine.classList.add('vertical-line');
+        const verticalLine = document.createElement('div');
+        verticalLine.classList.add('vertical-line');
 
-          const userComment = document.createElement('p');
-          userComment.textContent = commentText;
-          userComment.classList.add('user-comment');
+        const userComment = document.createElement('p');
+        userComment.textContent = commentText;
+        userComment.classList.add('user-comment');
 
-          commentContainer.append(userName, verticalLine, userComment);
-        })
-        .then(() => {
-          fetchAndDisplayComments();
-        });
+        commentContainer.append(userName, verticalLine, userComment);
+        // Update comment count
+        const commentCount = countComments();
+        commentCountElements.textContent = `Previous comments: ${commentCount}`;
+      });
     };
 
     const form = document.createElement('form');
@@ -297,4 +278,3 @@ pokemonData.forEach((pokemon, index) => {
 pokemonListContainer.append(counter, rowsContainer);
 
 itemCounter(pokemonData);
-commentCounter(pokemonData);
