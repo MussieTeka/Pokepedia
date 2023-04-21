@@ -1,6 +1,3 @@
-import './style.css';
-
-// Items counter
 export const counter = document.createElement('div');
 counter.classList.add('counter');
 
@@ -9,7 +6,7 @@ itemcounter.classList.add('item-counter');
 
 counter.appendChild(itemcounter);
 
-export const createCounter = (pokemonData) => {
+export const itemCounter = (pokemonData) => {
   const itemCount = pokemonData.length;
   itemcounter.textContent = `Poké Count: ${itemCount}`;
 };
