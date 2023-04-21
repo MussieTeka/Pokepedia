@@ -269,3 +269,7 @@ footer {
   font-size: 18px;
   color: #333;
 }
+
+.user-date {
+  color: gray;
+}
