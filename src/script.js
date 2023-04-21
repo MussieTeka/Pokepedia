@@ -142,7 +142,16 @@ pokemonData.forEach((pokemon, index) => {
             userComment.textContent = comment.comment;
             userComment.classList.add('user-comment');
 
-            commentContainer.append(userName, verticalLine, userComment);
+            const commentDate = document.createElement('p');
+            commentDate.textContent = comment.creation_date;
+            commentDate.classList.add('user-date');
+
+            commentContainer.append(
+              userName,
+              commentDate,
+              verticalLine,
+              userComment,
+            );
           });
 
           previousComments.append(commentContainer);
