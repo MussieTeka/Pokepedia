@@ -9,19 +9,19 @@ const pokemonData = [
     name: 'pikachu',
     image:
       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/25.png',
-    likes: '',
+    likes: 'loading',
   },
   {
     name: 'charmander',
     image:
       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/4.png',
-    likes: '',
+    likes: 'loading',
   },
   {
     name: 'mewtwo',
     image:
       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/150.png',
-    likes: '',
+    likes: 'loading',
   },
   {
     name: 'squirtle',
@@ -33,13 +33,13 @@ const pokemonData = [
     name: 'bulbasaur',
     image:
       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/1.png',
-    likes: '',
+    likes: 'loading',
   },
   {
     name: 'charizard',
     image:
       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/6.png',
-    likes: '',
+    likes: 'loading',
   },
 ];
 
