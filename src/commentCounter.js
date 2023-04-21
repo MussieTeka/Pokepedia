@@ -1,20 +1,8 @@
-import { counter } from './itemCounter.js';
+export const commentCountElements = document.createElement('h4');
+commentCountElements.textContent = 'Previous comments...';
 
-const commentCounter = (pokemonData) => {
-  let totalComments = 0;
-  const promises = pokemonData.map((pokemon) => fetch(
-    `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/comments?item_id=${pokemon.name}`,
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      totalComments += data.length;
-    }));
-  Promise.all(promises).then(() => {
-    const commentCounterElement = document.createElement('p');
-    commentCounterElement.classList.add('comment-counter');
-    commentCounterElement.textContent = `Total Comments: ${totalComments}`;
-    counter.append(commentCounterElement);
-  });
+// Function to count comments
+export const countComments = () => {
+  const commentCountElements = document.querySelectorAll('.user-comment');
+  return commentCountElements.length;
 };
-
-export default commentCounter;
