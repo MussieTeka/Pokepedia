@@ -70,7 +70,7 @@ pokemonData.forEach((pokemon, index) => {
   // Popup window
   commentButton.addEventListener('click', async () => {
     const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${pokemon.name}`
+      `https://pokeapi.co/api/v2/pokemon/${pokemon.name}`,
     );
     const data = await response.json();
 
@@ -122,7 +122,7 @@ pokemonData.forEach((pokemon, index) => {
 
     function fetchAndDisplayComments() {
       fetch(
-        `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/nFsF5tumQEVYa0WWw9ph/comments?item_id=${pokemon.name}`
+        `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/nFsF5tumQEVYa0WWw9ph/comments?item_id=${pokemon.name}`,
       )
         .then((response) => response.json())
         .then((data) => {
@@ -147,7 +147,7 @@ pokemonData.forEach((pokemon, index) => {
           previousComments.append(commentContainer);
         })
         .catch((error) => {
-          console.error(error);
+          throw new Error(error);
         });
     }
 
@@ -157,18 +157,18 @@ pokemonData.forEach((pokemon, index) => {
     function addComment(username, commentText) {
       const comment = {
         item_id: `${pokemon.name}`,
-        username: username,
+        username,
         comment: commentText,
       };
       fetch(
-        `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/nFsF5tumQEVYa0WWw9ph/comments`,
+        'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/nFsF5tumQEVYa0WWw9ph/comments',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(comment),
-        }
+        },
       );
     }
 
@@ -208,7 +208,7 @@ pokemonData.forEach((pokemon, index) => {
       name,
       description,
       previousComments,
-      form
+      form,
     );
 
     popupContainer.append(popupContent);
@@ -220,25 +220,27 @@ pokemonData.forEach((pokemon, index) => {
   //   Add likes to API
   const fetchAndUpdateLikes = (pokemon) => {
     fetch(
-      `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/tVqztXshPZbS48Z4myPF/likes?item_id=${pokemon.name}`
+      `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/tVqztXshPZbS48Z4myPF/likes?item_id=${pokemon.name}`,
     )
       .then((response) => response.json())
       .then((data) => {
         pokemon.likes = data[index].likes;
         likes.textContent = `${pokemon.likes} likes`;
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        throw new Error(error);
+      });
   };
   fetchAndUpdateLikes(pokemon);
 
   heartIcon.addEventListener('click', () => {
     fetch(
-      `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/tVqztXshPZbS48Z4myPF/likes`,
+      'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/tVqztXshPZbS48Z4myPF/likes',
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ item_id: pokemon.name }),
-      }
+      },
     );
     fetchAndUpdateLikes(pokemon);
   });
