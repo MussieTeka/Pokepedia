@@ -2,7 +2,7 @@
 
 <div align="center">
  
-  <h3><b>JavaScript-Group Capstone</b></h3>
+  <h3><b>Pokepedia: JavaScript-Group Capstone</b></h3>
 
 </div>
 
@@ -27,9 +27,11 @@
 - [❓ FAQ (OPTIONAL)](#faq)
 - [📝 License](#license)
 
-# 📖 JavaScript Group Capstone <a name="about-project"></a>
+# 📖 Pokepedia: JavaScript Group Capstone <a name="about-project"></a>
 
-**JavaScript-Group-Capstone** is a group project built with JavaScript and agile methodology that provides a powerful tool for managing tasks and workflow. Our Kanban board offers a visual overview of your project's progress and makes it easy to prioritize work.
+**Pokepedia** is a simple web application that allows users to view and learn about different Pokemon characters. Users can view images of each Pokemon, add comments to their profiles, and see comments that others have left.
+
+This project is built using JavaScript, HTML, and CSS, with webpack as the build tool. It makes use of the PokeAPI to retrieve information about each Pokemon, and also utilizes a custom API to store and retrieve comments.
 
 ## 🛠 Built With <a name="built-with"></a>
 
@@ -57,13 +59,17 @@
 
 ### Key Features <a name="key-features"></a>
 
-- Kanban board for managing tasks
-- Drag and drop functionality for moving tasks between columns
-- Task cards with details such as title, description, deadline, and assignee
-- Ability to filter tasks by assignee or deadline
-- User authentication and authorization
-- Dashboard with project statistics and progress metrics
-- Collaboration features such as comments and notifications
+- Displaying a list of Pokemon cards with their images, names, and a heart icon for users to like.
+
+- Enabling users to add comments to each Pokemon card by clicking on the "Add Comment" button.
+
+- Displaying a pop-up window when a user clicks on the "Add Comment" button, which includes the Pokemon's details and a form to add a comment.
+
+- Fetching and displaying previous comments for each Pokemon from an API.
+
+- Allowing users to add comments for each Pokemon to the API by submitting a form.
+
+- Displaying the number of previous comments for each Pokemon.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -119,8 +125,6 @@ You can deploy this project using any web hosting service of your choice.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- AUTHORS -->
-
 ## 👥 Authors <a name="authors"></a>
 
 This project was developed by:
@@ -140,8 +144,11 @@ This project was developed by:
 
 ## 🔭 Future Features <a name="future-features"></a>
 
-- Ability to assign multiple users to a task
-- Customizable task card templates
+- User Profiles: Allow users to create profiles on the website, including a profile picture, bio, and other details. This could also include the ability for users to follow each other or connect in some way.
+
+- Social Media Integration: Allow users to easily share content from the website on popular social media platforms, such as Facebook, Twitter, Instagram, and LinkedIn.
+
+- User Reviews: Allow users to leave reviews or ratings for products, services, or other content on the website. This could help build trust and credibility with potential customers.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -161,9 +168,13 @@ If you like this project, please give it a star on GitHub.
 
 ## 🙏 Acknowledgments <a name="acknowledgements"></a>
 
-I would like to thank the following resources and individuals for their help and inspiration:
+This project was inspired by the [PokeAPI](https://pokeapi.co/), an open API for accessing Pokémon data.
 
-- <a href="https://www.microverse.org/">Microverse</a>, an online software engineering coding bootcamp.
+The following resources were used in the development of this project:
+
+- [Font Awesome](https://fontawesome.com/)
+- [Webpack](https://webpack.js.org/)
+- [Microverse](https://www.microverse.org/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
