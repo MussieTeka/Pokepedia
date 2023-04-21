@@ -2,6 +2,8 @@ import './style.css';
 
 import { counter, createCounter } from './itemCounter.js';
 
+import commentCounter from './commentCounter.js';
+
 const pokemonData = [
   {
     name: 'pikachu',
@@ -268,3 +270,4 @@ pokemonData.forEach((pokemon, index) => {
 pokemonListContainer.append(counter, rowsContainer);
 
 createCounter(pokemonData);
+commentCounter(pokemonData);
