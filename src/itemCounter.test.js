@@ -1,13 +1,17 @@
-import { counter, itemCounter } from './itemCounter.js';
+import { createItemCounter, itemCounter } from './itemCounter.js';
 
-describe('itemCounter', () => {
-  test('displays the correct Pokémon count', () => {
-    const pokemonData = [
-      { name: 'Bulbasaur', type: 'Grass/Poison' },
-      { name: 'Charmander', type: 'Fire' },
-      { name: 'Squirtle', type: 'Water' },
-    ];
-    itemCounter(pokemonData);
-    expect(counter.textContent).toBe('Poké Count: 3');
+describe('createItemCounter test', () => {
+  test('checks for no pokemon cards', () => {
+    document.body.innerHTML = '';
+    createItemCounter();
+    expect(itemCounter.textContent).toEqual('No items to show');
+  });
+
+  test('check for pokemon cards', () => {
+    document.body.innerHTML = `
+    <div class="pokemon-card"></div>
+    <div class="pokemon-card"></div>`;
+    createItemCounter();
+    expect(itemCounter.textContent).toEqual('Showing 2 items');
   });
 });

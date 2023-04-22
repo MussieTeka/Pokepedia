@@ -1,12 +1,16 @@
 export const counter = document.createElement('div');
 counter.classList.add('counter');
 
-const itemcounter = document.createElement('p');
-itemcounter.classList.add('item-counter');
+export const itemCounter = document.createElement('p');
+itemCounter.classList.add('item-counter');
 
-counter.appendChild(itemcounter);
+counter.appendChild(itemCounter);
 
-export const itemCounter = (pokemonData) => {
-  const itemCount = pokemonData.length;
-  itemcounter.textContent = `Poké Count: ${itemCount}`;
+export const createItemCounter = () => {
+  const totalItems = document.querySelectorAll('.pokemon-card').length;
+  if (totalItems === 0) {
+    itemCounter.textContent = 'No items to show';
+  } else {
+    itemCounter.textContent = `Showing ${totalItems} items`;
+  }
 };
