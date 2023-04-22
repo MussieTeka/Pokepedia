@@ -6,31 +6,31 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   mode: 'development',
   entry: {
-    index: './src/script.js', // Entry point for the application
+    index: './src/script.js',
   },
-  // devtool: 'inline-source-map',
+
   devServer: {
-    static: './dist', // Serve static files from the 'dist' directory
+    static: './dist',
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html', // Use the index.html file as a template
+      template: './src/index.html',
     }),
   ],
   output: {
-    filename: '[name].bundle.js', // Use the entry point name for the bundle filename
-    path: path.resolve(__dirname, 'dist'), // Output to the 'dist' directory
-    clean: true, // Clean the output directory before building
+    filename: '[name].bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    clean: true,
   },
   module: {
     rules: [
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader'], // Process CSS files with 'style-loader' and 'css-loader'
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: 'asset/resource', // Process image files as assets
+        type: 'asset/resource',
       },
     ],
   },
