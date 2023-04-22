@@ -47,12 +47,11 @@ async function getPokemonList() {
 
     const fetchAndUpdateLikes = (pokemon, likesElement) => {
       fetch(
-        `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/likes?item_id=${pokemon.name}`
+        `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/likes?item_id=${pokemon.name}`,
       )
         .then((response) => response.json())
         .then((data) => {
-          const updatedLikes =
-            data.find((item) => item.item_id === pokemon.name)?.likes || 0;
+          const updatedLikes = data.find((item) => item.item_id === pokemon.name)?.likes || 0;
           pokemon.likes = updatedLikes;
           likesElement.textContent = `${updatedLikes} likes`;
         });
@@ -67,14 +66,14 @@ async function getPokemonList() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ item_id: pokemon.name }),
-        }
+        },
       ).then(() => fetchAndUpdateLikes(pokemon, likes));
     });
 
     // Popup window
     commentButton.addEventListener('click', async () => {
       const response = await fetch(
-        `https://pokeapi.co/api/v2/pokemon/${pokemon.name}`
+        `https://pokeapi.co/api/v2/pokemon/${pokemon.name}`,
       );
       const data = await response.json();
 
@@ -123,7 +122,7 @@ async function getPokemonList() {
       // Display previous comments from API
       const fetchAndDisplayComments = () => {
         fetch(
-          `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/comments?item_id=${pokemon.name}`
+          `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/comments?item_id=${pokemon.name}`,
         )
           .then((response) => response.json())
           .then((data) => {
@@ -150,7 +149,7 @@ async function getPokemonList() {
                 userName,
                 commentDate,
                 verticalLine,
-                userComment
+                userComment,
               );
             });
 
@@ -184,7 +183,7 @@ async function getPokemonList() {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(comment),
-          }
+          },
         ).then(() => {
           const commentContainer = document.querySelector('.comment-container');
           const userName = document.createElement('p');
@@ -242,7 +241,7 @@ async function getPokemonList() {
         name,
         description,
         previousComments,
-        form
+        form,
       );
       popupContainer.appendChild(popupContent);
       pokemonListContainer.append(popupContainer);
