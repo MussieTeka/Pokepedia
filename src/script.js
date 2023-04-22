@@ -1,289 +1,262 @@
 import './style.css';
 
-import { counter, itemCounter } from './itemCounter.js';
+import { counter, createItemCounter } from './itemCounter.js';
 
 import { commentCountElements, countComments } from './commentCounter.js';
 
-const pokemonData = [
-  {
-    name: 'pikachu',
-    image:
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/25.png',
-    likes: 'loading',
-  },
-  {
-    name: 'charmander',
-    image:
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/4.png',
-    likes: 'loading',
-  },
-  {
-    name: 'mewtwo',
-    image:
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/150.png',
-    likes: 'loading',
-  },
-  {
-    name: 'squirtle',
-    image:
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/7.png',
-    likes: '',
-  },
-  {
-    name: 'bulbasaur',
-    image:
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/1.png',
-    likes: 'loading',
-  },
-  {
-    name: 'charizard',
-    image:
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/6.png',
-    likes: 'loading',
-  },
-];
-
+// displaying the cards from Poke API
 const pokemonListContainer = document.querySelector('.pokemon-list');
 
 const rowsContainer = document.createElement('div');
 rowsContainer.classList.add('rows-container');
 
-pokemonData.forEach((pokemon, index) => {
-  const column = document.createElement('div');
-  column.classList.add('column');
+async function getPokemonList() {
+  const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=6');
+  const data = await response.json();
+  /* eslint-disable no-restricted-syntax */
+  for (const pokemon of data.results) {
+    /* eslint-disable no-await-in-loop */
 
-  const pokemonCard = document.createElement('div');
-  pokemonCard.classList.add('pokemon-card');
-
-  const image = document.createElement('img');
-  image.src = pokemon.image;
-
-  const name = document.createElement('h2');
-  name.textContent = pokemon.name;
-
-  const actions = document.createElement('div');
-  actions.classList.add('pokemon-actions');
-
-  const heartIcon = document.createElement('i');
-  heartIcon.classList.add('far', 'fa-heart');
-
-  const commentButton = document.createElement('button');
-  commentButton.classList.add('comment-button');
-  commentButton.textContent = 'Add Comment';
-
-  // Popup window
-  commentButton.addEventListener('click', async () => {
-    const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${pokemon.name}`,
-    );
+    const response = await fetch(pokemon.url);
     const data = await response.json();
 
-    const popupContainer = document.createElement('div');
-    popupContainer.classList.add('popup-container');
+    const column = document.createElement('div');
+    column.classList.add('column');
 
-    const popupContent = document.createElement('div');
-    popupContent.classList.add('popup-content');
-
-    const closeIcon = document.createElement('i');
-    closeIcon.classList.add('fas', 'fa-times', 'close-icon');
-
-    closeIcon.addEventListener('click', () => {
-      popupContainer.remove();
-    });
+    const pokemonCard = document.createElement('div');
+    pokemonCard.classList.add('pokemon-card');
 
     const image = document.createElement('img');
-    image.src = data.sprites.other['official-artwork'].front_default;
+    image.src = data.sprites.other['official-artwork'].front_shiny;
 
-    const name = document.createElement('h3');
+    const name = document.createElement('h2');
     name.textContent = pokemon.name;
 
-    const description = document.createElement('ul');
+    const actions = document.createElement('div');
+    actions.classList.add('pokemon-actions');
 
-    const species = document.createElement('li');
-    species.textContent = `Species: ${data.species.name}`;
+    const heartIcon = document.createElement('i');
+    heartIcon.classList.add('far', 'fa-heart');
 
-    const height = document.createElement('li');
-    height.textContent = `Height: ${data.height} decimetres`;
+    const commentButton = document.createElement('button');
+    commentButton.classList.add('comment-button');
+    commentButton.textContent = 'Add Comment';
 
-    const weight = document.createElement('li');
-    weight.textContent = `Weight: ${data.weight} hectograms`;
+    const likes = document.createElement('span');
+    likes.textContent = '0 likes';
 
-    const abilities = document.createElement('li');
-    abilities.textContent = `Abilities: ${data.abilities
-      .map((a) => a.ability.name)
-      .join(', ')}`;
-
-    description.append(species, height, weight, abilities);
-
-    // comment section
-    const previousComments = document.createElement('div');
-    previousComments.classList.add('previous-comments');
-    previousComments.append(commentCountElements);
-
-    // Display previous comments from API
-    const fetchAndDisplayComments = () => {
+    const fetchAndUpdateLikes = (pokemon, likesElement) => {
       fetch(
-        `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/comments?item_id=${pokemon.name}`,
+        `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/likes?item_id=${pokemon.name}`,
       )
         .then((response) => response.json())
         .then((data) => {
-          const commentContainer = document.createElement('div');
-          commentContainer.classList.add('comment-container');
-
-          data.forEach((comment) => {
-            const userName = document.createElement('p');
-            userName.textContent = comment.username;
-            userName.classList.add('user-name');
-
-            const verticalLine = document.createElement('div');
-            verticalLine.classList.add('vertical-line');
-
-            const userComment = document.createElement('p');
-            userComment.textContent = comment.comment;
-            userComment.classList.add('user-comment');
-
-            const commentDate = document.createElement('p');
-            commentDate.textContent = comment.creation_date;
-            commentDate.classList.add('user-date');
-
-            commentContainer.append(
-              userName,
-              commentDate,
-              verticalLine,
-              userComment,
-            );
-          });
-
-          previousComments.append(commentContainer);
-
-          // Display comment count
-          const commentCount = countComments();
-
-          commentCountElements.textContent = `Previous comments: ${commentCount}`;
+          const updatedLikes = data.find((item) => item.item_id === pokemon.name)?.likes || 0;
+          pokemon.likes = updatedLikes;
+          likesElement.textContent = `${updatedLikes} likes`;
         });
     };
 
-    fetchAndDisplayComments();
+    fetchAndUpdateLikes(pokemon, likes);
 
-    // Append previousComments element to the DOM
-    const container = document.querySelector('.container');
-    container.append(previousComments);
-
-    //  Add comments to API
-    const addComment = (username, commentText) => {
-      const comment = {
-        item_id: `${pokemon.name}`,
-        username,
-        comment: commentText,
-      };
+    heartIcon.addEventListener('click', () => {
       fetch(
-        'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/comments',
+        'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/likes',
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(comment),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ item_id: pokemon.name }),
         },
-      ).then(() => {
-        const commentContainer = document.querySelector('.comment-container');
-        const userName = document.createElement('p');
-
-        userName.textContent = username;
-        userName.classList.add('user-name');
-
-        const verticalLine = document.createElement('div');
-        verticalLine.classList.add('vertical-line');
-
-        const userComment = document.createElement('p');
-        userComment.textContent = commentText;
-        userComment.classList.add('user-comment');
-
-        commentContainer.append(userName, verticalLine, userComment);
-        // Update comment count
-        const commentCount = countComments();
-        commentCountElements.textContent = `Previous comments: ${commentCount}`;
-      });
-    };
-
-    const form = document.createElement('form');
-    const commentTitle = document.createElement('h3');
-    commentTitle.textContent = 'Drop your comment!';
-
-    const nameInput = document.createElement('input');
-    nameInput.type = 'text';
-    nameInput.placeholder = 'Name';
-
-    const commentInput = document.createElement('input');
-    commentInput.type = 'text';
-    commentInput.placeholder = 'Comment';
-
-    const submitButton = document.createElement('button');
-    submitButton.type = 'submit';
-    submitButton.textContent = 'Submit';
-
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const username = nameInput.value.trim();
-      const commentText = commentInput.value.trim();
-      if (username === '' || commentText === '') {
-        return;
-      }
-      addComment(username, commentText);
-      nameInput.value = '';
-      commentInput.value = '';
+      ).then(() => fetchAndUpdateLikes(pokemon, likes));
     });
 
-    form.append(commentTitle, nameInput, commentInput, submitButton);
+    // Popup window
+    commentButton.addEventListener('click', async () => {
+      const response = await fetch(
+        `https://pokeapi.co/api/v2/pokemon/${pokemon.name}`,
+      );
+      const data = await response.json();
 
-    popupContent.append(
-      closeIcon,
-      image,
-      name,
-      description,
-      previousComments,
-      form,
-    );
+      const popupContainer = document.createElement('div');
+      popupContainer.classList.add('popup-container');
 
-    popupContainer.append(popupContent);
-    pokemonListContainer.append(popupContainer);
-  });
+      const popupContent = document.createElement('div');
+      popupContent.classList.add('popup-content');
 
-  const likes = document.createElement('span');
-  likes.textContent = `${pokemon.likes} likes`;
+      const closeIcon = document.createElement('i');
+      closeIcon.classList.add('fas', 'fa-times', 'close-icon');
 
-  //   Add likes to API
-  const fetchAndUpdateLikes = (pokemon) => {
-    fetch(
-      `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/likes?item_id=${pokemon.name}`,
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        pokemon.likes = data[index].likes;
-        likes.textContent = `${pokemon.likes} likes`;
+      closeIcon.addEventListener('click', () => {
+        popupContainer.remove();
       });
-  };
-  fetchAndUpdateLikes(pokemon);
 
-  heartIcon.addEventListener('click', () => {
-    fetch(
-      'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/likes',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ item_id: pokemon.name }),
-      },
-    );
-    fetchAndUpdateLikes(pokemon);
-  });
+      const image = document.createElement('img');
+      image.src = data.sprites.other['official-artwork'].front_default;
 
-  actions.append(heartIcon, likes, commentButton);
-  pokemonCard.append(image, name, actions);
-  column.append(pokemonCard);
+      const name = document.createElement('h3');
+      name.textContent = pokemon.name;
 
-  rowsContainer.append(column);
-});
+      const description = document.createElement('ul');
 
-pokemonListContainer.append(counter, rowsContainer);
+      const species = document.createElement('li');
+      species.textContent = `Species: ${data.species.name}`;
 
-itemCounter(pokemonData);
+      const height = document.createElement('li');
+      height.textContent = `Height: ${data.height} decimetres`;
+
+      const weight = document.createElement('li');
+      weight.textContent = `Weight: ${data.weight} hectograms`;
+
+      const abilities = document.createElement('li');
+      abilities.textContent = `Abilities: ${data.abilities
+        .map((a) => a.ability.name)
+        .join(', ')}`;
+
+      description.append(species, height, weight, abilities);
+
+      // comment section
+      const previousComments = document.createElement('div');
+      previousComments.classList.add('previous-comments');
+      previousComments.append(commentCountElements);
+
+      // Display previous comments from API
+      const fetchAndDisplayComments = () => {
+        fetch(
+          `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/comments?item_id=${pokemon.name}`,
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            const commentContainer = document.createElement('div');
+            commentContainer.classList.add('comment-container');
+
+            data.forEach((comment) => {
+              const userName = document.createElement('p');
+              userName.textContent = comment.username;
+              userName.classList.add('user-name');
+
+              const verticalLine = document.createElement('div');
+              verticalLine.classList.add('vertical-line');
+
+              const userComment = document.createElement('p');
+              userComment.textContent = comment.comment;
+              userComment.classList.add('user-comment');
+
+              const commentDate = document.createElement('p');
+              commentDate.textContent = comment.creation_date;
+              commentDate.classList.add('user-date');
+
+              commentContainer.append(
+                userName,
+                commentDate,
+                verticalLine,
+                userComment,
+              );
+            });
+
+            previousComments.append(commentContainer);
+
+            // Display comment count
+            const commentCount = countComments();
+
+            commentCountElements.textContent = `Previous comments: ${commentCount}`;
+          });
+      };
+
+      fetchAndDisplayComments();
+
+      // Append previousComments element to the DOM
+      const container = document.querySelector('.container');
+      container.append(previousComments);
+
+      //  Add comments to API
+      const addComment = (username, commentText) => {
+        const comment = {
+          item_id: `${pokemon.name}`,
+          username,
+          comment: commentText,
+        };
+        fetch(
+          'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/lVDxwD37BAWVnTQOm4Iz/comments',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(comment),
+          },
+        ).then(() => {
+          const commentContainer = document.querySelector('.comment-container');
+          const userName = document.createElement('p');
+
+          userName.textContent = username;
+          userName.classList.add('user-name');
+
+          const verticalLine = document.createElement('div');
+          verticalLine.classList.add('vertical-line');
+
+          const userComment = document.createElement('p');
+          userComment.textContent = commentText;
+          userComment.classList.add('user-comment');
+
+          commentContainer.append(userName, verticalLine, userComment);
+          // Update comment count
+          const commentCount = countComments();
+          commentCountElements.textContent = `Previous comments: ${commentCount}`;
+        });
+      };
+
+      const form = document.createElement('form');
+      const commentTitle = document.createElement('h3');
+      commentTitle.textContent = 'Drop your comment!';
+
+      const nameInput = document.createElement('input');
+      nameInput.type = 'text';
+      nameInput.placeholder = 'Name';
+
+      const commentInput = document.createElement('input');
+      commentInput.type = 'text';
+      commentInput.placeholder = 'Comment';
+
+      const submitButton = document.createElement('button');
+      submitButton.type = 'submit';
+      submitButton.textContent = 'Submit';
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const username = nameInput.value.trim();
+        const commentText = commentInput.value.trim();
+        if (username === '' || commentText === '') {
+          return;
+        }
+        addComment(username, commentText);
+        nameInput.value = '';
+        commentInput.value = '';
+      });
+
+      form.append(commentTitle, nameInput, commentInput, submitButton);
+
+      popupContent.append(
+        closeIcon,
+        image,
+        name,
+        description,
+        previousComments,
+        form,
+      );
+      popupContainer.appendChild(popupContent);
+      pokemonListContainer.append(popupContainer);
+    });
+    actions.append(heartIcon, likes, commentButton);
+    pokemonCard.append(image, name, actions);
+    column.append(pokemonCard);
+
+    rowsContainer.append(column);
+  }
+
+  pokemonListContainer.append(counter, rowsContainer);
+
+  // call createItemCounter after rowsContainer has been appended
+  createItemCounter();
+}
+
+getPokemonList();
