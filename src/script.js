@@ -11,7 +11,7 @@ const rowsContainer = document.createElement('div');
 rowsContainer.classList.add('rows-container');
 
 async function getPokemonList() {
-  const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=6');
+  const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=18');
   const data = await response.json();
   /* eslint-disable no-restricted-syntax */
   for (const pokemon of data.results) {
